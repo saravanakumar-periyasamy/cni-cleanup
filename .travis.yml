@@ -1,0 +1,26 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  - CGO_ENABLED=0
+
+language: go
+
+go:
+  - "1.9"
+
+install: true
+
+script:
+  - go build -v -o cni-cleanup .
+
+after_success:
+  - docker build -t speriyasamy/cni-cleanup .
+
+deploy:
+  provider: script
+  script: bash docker_push
+  on:
+    branch: master
